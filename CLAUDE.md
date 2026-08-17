@@ -113,8 +113,8 @@ components/
     button.tsx
     card.tsx
     input.tsx
-  linkit-item.tsx       # Core reusable LinkIt item component
-  widget.tsx            # Design-system card primitive
+  widget.tsx            # Design-system card shell (server component)
+  editable-widget.tsx   # Widget with hover resize + delete controls
   theme-provider.tsx    # next-themes wrapper
   theme-toggle.tsx      # Light/dark switch in the nav
 
@@ -124,7 +124,6 @@ lib/
 
 types/
   username.ts           # UsernameState, CheckUsernameResponse
-  linkit-item.ts        # Types for LinkIt item component
   widget.ts             # WidgetSize, WidgetTone
 
 hooks/
@@ -137,13 +136,13 @@ hooks/
 
 - **Feature-based**: Landing page sections are grouped in `components/landing-wall/`
 - **UI primitives**: Reusable Shadcn components in `components/ui/`
-- **Shared components**: Root-level components like `linkit-item.tsx` for cross-feature use
+- **Shared components**: Root-level components like `widget.tsx` for cross-feature use
 
 **2. Type Safety**
 
 - All components use **TypeScript types** (not interfaces) for props
 - Types are **collocated** with components when simple, or centralized in `types/` when shared
-- Example: `LinkitItemProps` is in `types/linkit-item.ts` because it's used across files
+- Example: `WidgetSize` is in `types/widget.ts` because it's used across files
 
 **3. Data Flow**
 
@@ -154,14 +153,14 @@ hooks/
 **4. Styling Patterns**
 
 - **Tailwind CSS 4** with `@tailwindcss/postcss`
-- **Class variance authority (CVA)** for component variants (see `linkit-item.tsx`)
+- **Class variance authority (CVA)** for component variants (see `widget.tsx`)
 - **cn()** utility (from `lib/utils.ts`) for conditional class merging
 - **CSS transitions** driven by the design system's motion tokens (`--ease-out`, `--dur-mid`)
 
 **5. Server/Client Boundaries**
 
 - Most components are **Server Components** by default
-- Client components are marked with `'use client'` (e.g., `linkit-item.tsx`, `UsernameClaimField.tsx`)
+- Client components are marked with `'use client'` (e.g., `editable-widget.tsx`, `UsernameClaimField.tsx`)
 - API routes use **Next.js Route Handlers** (`app/api/*/route.ts`)
 
 ---
@@ -186,16 +185,17 @@ Imports are automatically sorted via `@trivago/prettier-plugin-sort-imports`:
 
 - Use **type** (not interface) for component props unless they're overly complex
 - **Collocate** props type with the component when it's only used in one file
-- Example from `linkit-item.tsx`:
+- Example from `editable-widget.tsx`:
 
 ```typescript
-export type LinkitItemProps = {
+export type EditableWidgetProps = {
   children: React.ReactNode;
-  size?: LinkitItemSize;
-  onSizeChange?: (size: LinkitItemSize) => void;
+  size?: WidgetSize;
+  tone?: WidgetTone;
+  onSizeChange?: (size: WidgetSize) => void;
   onDelete?: () => void;
-  className?: string;
   disabled?: boolean;
+  className?: string;
 };
 ```
 
@@ -204,7 +204,7 @@ export type LinkitItemProps = {
 Uses `@/*` for absolute imports (configured in `tsconfig.json`):
 
 ```typescript
-import type { LinkitItemProps } from '@/types/linkit-item';
+import type { WidgetSize } from '@/types/widget';
 
 import { cn } from '@/lib/utils';
 
@@ -229,23 +229,35 @@ Username validation is split into two layers:
 
 ## Component Patterns
 
-### LinkIt Item Component
+### Widget
 
-The core reusable component for displaying content blocks in a masonry-style layout.
+The shell every piece of profile content lives in. Content-agnostic, five fixed
+footprints, carrying the design system's sheen and bevel.
 
-**Features:**
-
-- 5 size variants: `xs`, `sm`, `md`, `lg`, `xl`
-- Hover controls: resize toolbar (bottom) and delete button (top-left)
-- Controlled/uncontrolled state support
-- Uses CVA for variant styling
-
-**Usage:**
+- 5 size variants: `xs`, `sm`, `md`, `lg`, `xl` (see `WIDGET_SIZES`)
+- 7 tones: `surface` plus the six pastel accent families
+- `fill` hands sizing to the parent, for layouts that own the box
+- Uses CVA for tone styling
+- A **server component** — keep it that way so static walls stay off the client
 
 ```tsx
-<LinkitItem size="md" onSizeChange={handleResize} onDelete={handleDelete}>
+<Widget size="md" tone="lilac">
   {/* Content here */}
-</LinkitItem>
+</Widget>
+```
+
+### EditableWidget
+
+`Widget` plus the controls for rearranging a profile. A client component.
+
+- Hover or keyboard focus reveals a resize toolbar (bottom) and delete control (top-left)
+- Controlled when `onSizeChange` is passed, uncontrolled otherwise
+- Resizing morphs the footprint over 500ms rather than snapping
+
+```tsx
+<EditableWidget size={size} onSizeChange={setSize} onDelete={remove} tone="peach">
+  {/* Content here */}
+</EditableWidget>
 ```
 
 ### Custom Hooks
@@ -374,7 +386,7 @@ npx shadcn@latest add <component>
 **Demo Page:**
 
 - Located at `/demo`
-- Showcases `LinkitItem` component with interactive resizing
+- Widget playground: editable widgets, all five footprints, all seven tones, and content examples
 
 **No Database Yet:**
 

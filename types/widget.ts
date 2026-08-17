@@ -1,6 +1,5 @@
 /**
  * Widget footprint sizes.
- * Values match the LinkitItem CVA variants the design system was derived from.
  */
 export type WidgetSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 

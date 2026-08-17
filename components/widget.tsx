@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 
 /**
  * Widget footprints, in pixels.
- * Copied from the LinkitItem size variants so both stay in step.
  */
 export const WIDGET_SIZES: Record<WidgetSize, { width: number; height: number }> = {
   xs: { width: 240, height: 280 },
@@ -16,8 +15,8 @@ export const WIDGET_SIZES: Record<WidgetSize, { width: number; height: number }>
   xl: { width: 600, height: 380 },
 };
 
-const widgetVariants = cva(
-  'relative h-full w-full overflow-hidden rounded-widget border p-6 shadow-widget transition-shadow duration-200 ease-out',
+export const widgetVariants = cva(
+  'relative h-full w-full overflow-hidden rounded-widget border p-6 transition-shadow duration-200 ease-out',
   {
     variants: {
       tone: {
@@ -46,10 +45,13 @@ export type WidgetProps = {
 };
 
 /**
- * A single card on the profile wall.
+ * The shell every piece of profile content lives in.
  *
- * Renders at a fixed footprint from WIDGET_SIZES and carries the design
- * system's sheen and bevel so the surface reads curved rather than flat.
+ * Content-agnostic, five fixed footprints, carrying the design system's sheen
+ * and bevel so the surface reads curved rather than flat.
+ *
+ * This is a server component. For the hover-revealed resize and delete
+ * controls, use EditableWidget, which wraps this one.
  */
 export function Widget({
   children,
