@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { CheckUsernameResponse, UsernameState } from '@/types/landing';
+import type { CheckUsernameResponse, UsernameState } from '@/types/username';
 
 import { validateUsername } from '@/lib/validation';
 

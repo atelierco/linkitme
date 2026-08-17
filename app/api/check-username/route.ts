@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import type { CheckUsernameResponse } from '@/types/landing';
+import type { CheckUsernameResponse } from '@/types/username';
 
 import { normalizeUsername, validateUsername } from '@/lib/validation';
 

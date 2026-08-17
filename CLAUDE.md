@@ -10,13 +10,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Tech Stack:**
 
-- **Framework**: Next.js 16.0.1 (App Router, React Server Components)
-- **React**: 19.2.0
+- **Framework**: Next.js 16 (App Router, React Server Components)
+- **React**: 19
 - **TypeScript**: 5.x (strict mode enabled)
 - **Styling**: Tailwind CSS 4 with custom config
 - **UI Components**: Shadcn/UI (New York style)
 - **Icons**: Lucide React
-- **Animation**: Framer Motion
+- **Theming**: next-themes (light/dark)
 - **Package Manager**: pnpm 9.15.0
 
 ---
@@ -78,29 +78,30 @@ app/
   globals.css           # Global Tailwind styles
 
 components/
-  landing/              # Landing page-specific components
-    ExamplesGallery.tsx
-    Features.tsx
-    Footer.tsx
-    Header.tsx
-    Hero.tsx
-    UsernameClaimForm.tsx
+  landing-wall/         # Landing page sections ("studio wall" design)
+    PinnedWall.tsx      # Absolutely-positioned card wall, lg and up
+    UsernameClaimField.tsx
+    WallHeader.tsx
+    WallHero.tsx
+    WallStrip.tsx       # Horizontally scrolling cards, below lg
+    wall-cards.tsx      # Card content shared by PinnedWall and WallStrip
   ui/                   # Shadcn UI components
     button.tsx
     card.tsx
     input.tsx
   linkit-item.tsx       # Core reusable LinkIt item component
+  widget.tsx            # Design-system card primitive
+  theme-provider.tsx    # next-themes wrapper
+  theme-toggle.tsx      # Light/dark switch in the nav
 
 lib/
   utils.ts              # cn() utility for class merging
   validation.ts         # Username validation logic
 
 types/
-  landing.ts            # Types for landing page (Feature, ExamplePage, etc.)
+  username.ts           # UsernameState, CheckUsernameResponse
   linkit-item.ts        # Types for LinkIt item component
-
-constants/
-  landing.ts            # Landing page data (FEATURES, EXAMPLE_PAGES, NAV_LINKS, etc.)
+  widget.ts             # WidgetSize, WidgetTone
 
 hooks/
   useUsernameCheck.ts   # Custom hook for username validation/checking
@@ -110,7 +111,7 @@ hooks/
 
 **1. Component Organization**
 
-- **Feature-based**: Landing page components are grouped in `components/landing/`
+- **Feature-based**: Landing page sections are grouped in `components/landing-wall/`
 - **UI primitives**: Reusable Shadcn components in `components/ui/`
 - **Shared components**: Root-level components like `linkit-item.tsx` for cross-feature use
 
@@ -122,7 +123,7 @@ hooks/
 
 **3. Data Flow**
 
-- **Constants** are centralized in `constants/` (e.g., `FEATURES`, `EXAMPLE_PAGES`)
+- **Section content** lives beside its components (e.g. `components/landing-wall/wall-cards.tsx`)
 - **API routes** follow Next.js App Router conventions (`app/api/*/route.ts`)
 - **Client hooks** handle async operations (e.g., `useUsernameCheck` for debounced API calls)
 
@@ -131,12 +132,12 @@ hooks/
 - **Tailwind CSS 4** with `@tailwindcss/postcss`
 - **Class variance authority (CVA)** for component variants (see `linkit-item.tsx`)
 - **cn()** utility (from `lib/utils.ts`) for conditional class merging
-- **Framer Motion** for animations
+- **CSS transitions** driven by the design system's motion tokens (`--ease-out`, `--dur-mid`)
 
 **5. Server/Client Boundaries**
 
 - Most components are **Server Components** by default
-- Client components are marked with `'use client'` (e.g., `linkit-item.tsx`, `UsernameClaimForm.tsx`)
+- Client components are marked with `'use client'` (e.g., `linkit-item.tsx`, `UsernameClaimField.tsx`)
 - API routes use **Next.js Route Handlers** (`app/api/*/route.ts`)
 
 ---
@@ -179,8 +180,10 @@ export type LinkitItemProps = {
 Uses `@/*` for absolute imports (configured in `tsconfig.json`):
 
 ```typescript
-import { cn } from '@/lib/utils';
 import type { LinkitItemProps } from '@/types/linkit-item';
+
+import { cn } from '@/lib/utils';
+
 import { Button } from '@/components/ui/button';
 ```
 
@@ -257,7 +260,6 @@ The core reusable component for displaying content blocks in a masonry-style lay
 ### Tailwind Configuration
 
 - **Version**: Tailwind CSS 4
-- **Custom plugin**: `tw-animate-css` for animations
 - **Base color**: `slate` (from Shadcn)
 - **Fonts**: Geist Sans and Geist Mono (loaded via `next/font`)
 
@@ -298,7 +300,7 @@ npx shadcn@latest add <component>
 
 ### New Components
 
-1. Determine if it's feature-specific (→ `components/landing/`) or reusable (→ `components/` or `components/ui/`)
+1. Determine if it's feature-specific (→ `components/landing-wall/`) or reusable (→ `components/` or `components/ui/`)
 2. Use **type** for props, colocate unless shared
 3. Mark client components with `'use client'`
 4. Use `cn()` for conditional classes
@@ -330,12 +332,13 @@ npx shadcn@latest add <component>
 
 ## Current State
 
-**Landing Page:**
+**Landing Page ("studio wall"):**
 
-- Hero with username claim form
-- Features section (6 features from `constants/landing.ts`)
-- Examples gallery (4 example pages)
-- Footer with navigation links
+- Ported from the LinkItMe design system's `landing-wall` template
+- Nav (wordmark, Explore, Log in, theme toggle), oversized headline, username claim field
+- A wall of five creator cards, pinned at slight rotations from `lg` up and
+  scaled down between `lg` and `2xl`; below `lg` the same cards render as a
+  horizontally scrolling strip
 
 **Demo Page:**
 
@@ -352,7 +355,7 @@ npx shadcn@latest add <component>
 ## Notes
 
 - **No tests yet**: Consider adding Jest/React Testing Library when implementing new features
-- **Mock data**: Example pages and reserved usernames are hardcoded; replace with dynamic data later
+- **Mock data**: Wall card content and reserved usernames are hardcoded; replace with dynamic data later
 - **Fonts**: Uses Geist Sans and Geist Mono from Google Fonts via `next/font`
 - **React 19**: Takes advantage of React Server Components and modern patterns
 
