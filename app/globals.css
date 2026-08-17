@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,6 +41,61 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* ── LinkItMe design system ──────────────────────────────────────────
+     Ported from the "LinkItMe Design System" project. Exposed as Tailwind
+     utilities: bg-lilac-sf, text-ink-strong, rounded-widget, shadow-widget… */
+
+  /* Pastel accent families. -sf surface, -bd border/tint, -ik ink on -sf */
+  --color-lilac-sf: var(--lilac-sf);
+  --color-lilac-bd: var(--lilac-bd);
+  --color-lilac-ik: var(--lilac-ik);
+  --color-sky-sf: var(--sky-sf);
+  --color-sky-bd: var(--sky-bd);
+  --color-sky-ik: var(--sky-ik);
+  --color-mint-sf: var(--mint-sf);
+  --color-mint-bd: var(--mint-bd);
+  --color-mint-ik: var(--mint-ik);
+  --color-blush-sf: var(--blush-sf);
+  --color-blush-bd: var(--blush-bd);
+  --color-blush-ik: var(--blush-ik);
+  --color-butter-sf: var(--butter-sf);
+  --color-butter-bd: var(--butter-bd);
+  --color-butter-ik: var(--butter-ik);
+  --color-peach-sf: var(--peach-sf);
+  --color-peach-bd: var(--peach-bd);
+  --color-peach-ik: var(--peach-ik);
+
+  /* Semantic surfaces and text */
+  --color-page: var(--page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink-strong: var(--text-strong);
+  --color-ink-body: var(--text-body);
+  --color-ink-muted: var(--text-muted);
+  --color-ink-faint: var(--text-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* Status */
+  --color-ok-ik: var(--ok-ik);
+  --color-danger-ik: var(--danger-ik);
+  --color-info-ik: var(--info-ik);
+
+  /* Radii */
+  --radius-inner: 16px;
+  --radius-widget: 24px;
+
+  /* Elevation */
+  --shadow-widget: var(--ds-shadow-widget);
+  --shadow-widget-hover: var(--ds-shadow-widget-hover);
+  --shadow-well: var(--ds-shadow-well);
+  --shadow-tile: var(--ds-shadow-tile);
+  --shadow-pop: var(--ds-shadow-pop);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root {
@@ -76,6 +131,82 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* ── LinkItMe design system: light ─────────────────────────────────── */
+
+  /* Neutral ramp (warm-leaning, never pure grey) */
+  --n-0: #ffffff;
+  --n-25: #fcfbfa;
+  --n-50: #f7f5f3;
+  --n-100: #f0eeeb;
+  --n-150: #e7e4e0;
+  --n-200: #dcd8d3;
+  --n-300: #bfbbb5;
+  --n-400: #9a968f;
+  --n-500: #78746e;
+  --n-600: #575450;
+  --n-700: #3c3a37;
+  --n-800: #26251f;
+  --n-900: #17161a;
+
+  /* Pastel accent families */
+  --lilac-sf: #ede9fb;
+  --lilac-bd: #d4caf3;
+  --lilac-ik: #6c5cc4;
+  --sky-sf: #e6effb;
+  --sky-bd: #c6d8f2;
+  --sky-ik: #4a7bbd;
+  --mint-sf: #e4f2ea;
+  --mint-bd: #c2dfce;
+  --mint-ik: #3f8a68;
+  --blush-sf: #fbe8ec;
+  --blush-bd: #f2ccd5;
+  --blush-ik: #bc5d79;
+  --butter-sf: #fbf2e0;
+  --butter-bd: #efddba;
+  --butter-ik: #9c7830;
+  --peach-sf: #fcebe3;
+  --peach-bd: #f4d2c1;
+  --peach-ik: #b96f42;
+
+  /* Semantic surfaces */
+  --page: var(--n-25);
+  --surface-card: var(--n-0);
+  --surface-sunken: var(--n-50);
+
+  /* Semantic text */
+  --text-strong: var(--n-900);
+  --text-body: var(--n-700);
+  --text-muted: var(--n-500);
+  --text-faint: var(--n-400);
+
+  /* Lines */
+  --line: var(--n-150);
+  --line-strong: var(--n-200);
+
+  /* Status */
+  --ok-ik: var(--mint-ik);
+  --danger-ik: #b24a4a;
+  --info-ik: var(--sky-ik);
+
+  /* Focus */
+  --focus-ring: rgba(108, 92, 196, 0.38);
+
+  /* Elevation: layered, warm-tinted. Nothing hard-edged. */
+  --ds-shadow-widget:
+    0 1px 1px rgba(23, 22, 26, 0.05), 0 4px 8px -4px rgba(23, 22, 26, 0.1),
+    0 18px 30px -14px rgba(23, 22, 26, 0.18);
+  --ds-shadow-widget-hover:
+    0 1px 1px rgba(23, 22, 26, 0.06), 0 8px 14px -6px rgba(23, 22, 26, 0.14),
+    0 30px 48px -18px rgba(23, 22, 26, 0.26);
+  --ds-shadow-tile: 0 1px 2px rgba(23, 22, 26, 0.1), 0 4px 8px -4px rgba(23, 22, 26, 0.14);
+  --ds-shadow-pop: 0 2px 4px rgba(23, 22, 26, 0.1), 0 18px 44px -10px rgba(23, 22, 26, 0.3);
+  --ds-shadow-well: inset 0 2px 6px rgba(23, 22, 26, 0.1), inset 0 0 0 1px var(--line);
+
+  /* Bevel and sheen — a lit top edge so surfaces read curved, not flat */
+  --bevel: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(23, 22, 26, 0.06);
+  --sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 58%);
+  --sheen-soft: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 62%);
 }
 
 .dark {
@@ -112,6 +243,59 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* ── LinkItMe design system: dark ──────────────────────────────────────
+   Same families, dimmed surfaces + lifted inks so pastels stay pastel. */
+.dark,
+:root[data-theme='dark'] {
+  --lilac-sf: #292447;
+  --lilac-bd: #3d3568;
+  --lilac-ik: #bcaef7;
+  --sky-sf: #1e2a3d;
+  --sky-bd: #2c3d57;
+  --sky-ik: #a4c6f0;
+  --mint-sf: #1c2e27;
+  --mint-bd: #2a4438;
+  --mint-ik: #96d3b0;
+  --blush-sf: #33222a;
+  --blush-bd: #4b313c;
+  --blush-ik: #efafc0;
+  --butter-sf: #302818;
+  --butter-bd: #463a22;
+  --butter-ik: #e6c98b;
+  --peach-sf: #33241d;
+  --peach-bd: #4a342a;
+  --peach-ik: #ebb394;
+
+  --page: #101116;
+  --surface-card: #1a1c22;
+  --surface-sunken: #15171c;
+
+  --text-strong: #f5f4f2;
+  --text-body: #dad8d4;
+  --text-muted: #9c9a96;
+  --text-faint: #77756f;
+
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --danger-ik: #ec9c9c;
+  --focus-ring: rgba(188, 174, 247, 0.4);
+
+  --ds-shadow-widget:
+    0 1px 2px rgba(0, 0, 0, 0.5), 0 6px 12px -6px rgba(0, 0, 0, 0.6),
+    0 22px 36px -16px rgba(0, 0, 0, 0.7);
+  --ds-shadow-widget-hover:
+    0 2px 4px rgba(0, 0, 0, 0.55), 0 12px 20px -8px rgba(0, 0, 0, 0.65),
+    0 34px 54px -20px rgba(0, 0, 0, 0.8);
+  --ds-shadow-tile: 0 1px 2px rgba(0, 0, 0, 0.55), 0 5px 10px -5px rgba(0, 0, 0, 0.6);
+  --ds-shadow-pop: 0 3px 6px rgba(0, 0, 0, 0.6), 0 22px 48px -12px rgba(0, 0, 0, 0.85);
+  --ds-shadow-well: inset 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 0 0 1px var(--line);
+
+  --bevel: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  --sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 58%);
+  --sheen-soft: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 62%);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -121,5 +305,18 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Pinned wall cards straighten and lift on hover. */
+.lim-pin {
+  transition: transform 200ms var(--ease-out);
+}
+.lim-pin:hover {
+  transform: rotate(0deg) translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lim-pin {
+    transition: none;
   }
 }
