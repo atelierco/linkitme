@@ -1,12 +1,10 @@
 'use client';
 
+import { FEATURES } from '@/constants/landing';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
 import { useRef } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
-
-import { FEATURES } from '@/constants/landing';
 
 /**
  * Features section with animated cards
@@ -57,7 +55,7 @@ export function Features() {
         {/* Features grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {FEATURES.map((feature, index) => {
-            const Icon = feature.icon as LucideIcon;
+            const Icon = feature.icon;
             return (
               <motion.div
                 key={feature.id}

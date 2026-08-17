@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { FOOTER_LINKS } from '@/constants/landing';
+import { SiGithub, SiX } from '@icons-pack/react-simple-icons';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter } from 'lucide-react';
 
 /**
  * Landing page footer with links and social media
@@ -47,13 +47,13 @@ export function Footer() {
             {/* Social links */}
             <div className="flex items-center space-x-4">
               <a
-                href="https://twitter.com"
+                href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Twitter"
+                aria-label="X"
               >
-                <Twitter className="h-5 w-5" />
+                <SiX className="h-5 w-5" />
               </a>
               <a
                 href="https://github.com"
@@ -62,7 +62,7 @@ export function Footer() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="GitHub"
               >
-                <Github className="h-5 w-5" />
+                <SiGithub className="h-5 w-5" />
               </a>
             </div>
           </div>

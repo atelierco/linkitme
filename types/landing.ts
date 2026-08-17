@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 
 /**
  * Feature card displayed in the Features section
@@ -7,7 +7,7 @@ export type Feature = {
   id: string;
   title: string;
   description: string;
-  icon: ReactNode;
+  icon: LucideIcon;
 };
 
 /**
