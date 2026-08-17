@@ -293,6 +293,42 @@ footprints, carrying the design system's sheen and bevel.
 
 ## Styling & Design System
 
+### The LinkItMe Design System
+
+This project has a **Claude design-system project** that is the source of truth for
+visuals. Consult it before inventing any styling.
+
+- **Project ID**: `8eb0141a-7745-4eb7-bbeb-e81cde173b86`
+- **URL**: https://claude.ai/design/p/8eb0141a-7745-4eb7-bbeb-e81cde173b86
+
+Read it with the `DesignSync` tool — `list_files` to see what exists, `get_file` to
+read one. Useful paths:
+
+| Path                     | What's there                                                       |
+| ------------------------ | ------------------------------------------------------------------ |
+| `tokens/*.css`           | colors, typography, spacing, radii, elevation, motion              |
+| `components/core/*`      | Avatar, Badge, Button, Card, Icon, Input                           |
+| `components/widgets/*`   | Widget, WidgetGrid, Link, Image, Gallery, Video, Map, Social, Text |
+| `components/marketing/*` | FeatureCard, UsernameClaimField                                    |
+| `components/profile/*`   | ProfileHeader, ProfileFooter                                       |
+| `templates/*`            | Four landing variants: wall, board, frame, index                   |
+| `ui_kits/*`              | `marketing_site` and `creator_app` reference compositions          |
+| `*.prompt.md`            | Per-component intent — read alongside the code                     |
+
+**The tokens are already ported** into `app/globals.css` under `@theme`, so use the
+Tailwind utilities (`bg-lilac-sf`, `text-ink-strong`, `rounded-widget`,
+`shadow-widget`) rather than raw `var(--…)` or new hardcoded colors.
+
+The design project's components are `.jsx` with inline styles — a design-tool
+convention, not a target to copy. Port them to TSX with Tailwind and CVA, matching
+the patterns already in `components/`. Where a prototype ships mock behaviour (the
+design system's `UsernameClaimField` has a hardcoded reserved-name list), keep the
+visuals and wire them to the real implementation.
+
+Currently ported: `landing-wall` (the landing page), `Widget`, `EditableWidget`, and
+the full token set. Not yet ported: the other three templates, `creator_app`, and
+most `components/widgets/*`.
+
 ### Tailwind Configuration
 
 - **Version**: Tailwind CSS 4
