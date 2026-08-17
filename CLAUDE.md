@@ -38,9 +38,33 @@ pnpm start
 # Run linter
 pnpm lint
 
+# Typecheck without emitting
+pnpm typecheck
+
 # Format code (via Prettier with import sorting)
 pnpm prettier --write .
 ```
+
+### Pre-commit Hook
+
+A husky `pre-commit` hook runs on every commit:
+
+1. **lint-staged** on staged files — `prettier --write` then `eslint --fix --max-warnings=0`
+2. **`pnpm typecheck`** — `tsc --noEmit` across the project
+
+Formatting is fixed and re-staged automatically, so a formatting slip never blocks a
+commit. Lint problems and type errors do block: `--max-warnings=0` means an unused
+import is enough to fail, which is deliberate.
+
+The hook installs itself via the `prepare` script, so `pnpm install` is all that's
+needed on a fresh clone. To bypass it in an emergency:
+
+```bash
+git commit --no-verify
+```
+
+Note that `tsc` cannot be scoped to staged files — it needs the whole program to
+resolve types — so the typecheck is always project-wide (~1.5s on this repo).
 
 ### Adding Shadcn Components
 
@@ -293,6 +317,13 @@ npx shadcn@latest add <component>
 - Single quotes
 - Trailing commas: ES5
 - Import sorting enabled
+
+### Git Hooks
+
+- **husky** runs the `pre-commit` hook; installed by the `prepare` script on `pnpm install`
+- **lint-staged** scopes Prettier and ESLint to staged files, and handles partially
+  staged files correctly (so `git add -p` hunks are not clobbered)
+- See [Pre-commit Hook](#pre-commit-hook) above for what runs and how to bypass it
 
 ---
 
