@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import Image from 'next/image';
-
 import type { LinkitItemSize } from '@/types/linkit-item';
 
 import { LinkitItem } from '@/components/linkit-item';
@@ -24,11 +22,7 @@ export default function DemoPage() {
 
         <div className="flex flex-wrap gap-8 items-start">
           {/* Example 1: Instagram-style profile */}
-          <LinkitItem
-            size={size1}
-            onSizeChange={setSize1}
-            onDelete={() => alert('Delete item 1')}
-          >
+          <LinkitItem size={size1} onSizeChange={setSize1} onDelete={() => alert('Delete item 1')}>
             <div className="flex flex-col items-center gap-4 h-full justify-center">
               <div className="w-20 h-20 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-2xl flex items-center justify-center">
                 <span className="text-white text-2xl font-bold">IG</span>
@@ -39,11 +33,7 @@ export default function DemoPage() {
           </LinkitItem>
 
           {/* Example 2: Simple text link */}
-          <LinkitItem
-            size={size2}
-            onSizeChange={setSize2}
-            onDelete={() => alert('Delete item 2')}
-          >
+          <LinkitItem size={size2} onSizeChange={setSize2} onDelete={() => alert('Delete item 2')}>
             <div className="flex items-center gap-4 h-full">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
                 <span className="text-white text-xl font-bold">🔗</span>
@@ -56,11 +46,7 @@ export default function DemoPage() {
           </LinkitItem>
 
           {/* Example 3: Image gallery */}
-          <LinkitItem
-            size={size3}
-            onSizeChange={setSize3}
-            onDelete={() => alert('Delete item 3')}
-          >
+          <LinkitItem size={size3} onSizeChange={setSize3} onDelete={() => alert('Delete item 3')}>
             <div className="flex flex-col gap-4 h-full">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl" />

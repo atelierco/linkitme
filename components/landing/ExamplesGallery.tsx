@@ -1,9 +1,81 @@
 'use client';
 
+import { EXAMPLE_PAGES } from '@/constants/landing';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import type { MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 
-import { EXAMPLE_PAGES } from '@/constants/landing';
+import type { ExamplePage } from '@/types/landing';
+
+/**
+ * Theme-based gradient used for an example page's avatar
+ */
+function getGradient(theme: ExamplePage['theme']) {
+  switch (theme) {
+    case 'dark':
+      return 'from-gray-700 via-gray-800 to-gray-900';
+    case 'light':
+      return 'from-blue-200 via-purple-200 to-pink-200';
+    case 'gradient':
+      return 'from-purple-500 via-pink-500 to-orange-500';
+    default:
+      return 'from-blue-500 to-purple-600';
+  }
+}
+
+type ExampleAvatarProps = {
+  example: ExamplePage;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+};
+
+/**
+ * Single example avatar with its own parallax transform.
+ * Extracted so the hook runs at component top level rather than inside a loop.
+ */
+function ExampleAvatar({ example, index, scrollYProgress }: ExampleAvatarProps) {
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, index % 2 === 0 ? -30 : -20]);
+  const gradient = getGradient(example.theme);
+
+  return (
+    <motion.a
+      href={`/${example.username}`}
+      className="group flex flex-col items-center cursor-pointer"
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+      style={{ y: yParallax }}
+    >
+      {/* Avatar circle */}
+      <div className="relative">
+        {/* Gradient ring on hover */}
+        <div
+          className={`absolute inset-0 rounded-full bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity blur-md`}
+        />
+
+        {/* Avatar */}
+        <div
+          className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center border-4 border-background shadow-lg`}
+        >
+          {/* Initials or icon */}
+          <span className="text-white font-bold text-2xl md:text-3xl">
+            {example.displayName.charAt(0)}
+          </span>
+        </div>
+      </div>
+
+      {/* Username */}
+      <p className="mt-3 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+        @{example.username}
+      </p>
+
+      {/* Category badge */}
+      <span className="mt-1 text-xs text-muted-foreground">{example.category}</span>
+    </motion.a>
+  );
+}
 
 /**
  * Examples gallery showing circular avatars of example users
@@ -52,68 +124,14 @@ export function ExamplesGallery() {
 
         {/* Examples - Circular avatars */}
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 max-w-4xl mx-auto">
-          {EXAMPLE_PAGES.map((example, index) => {
-            // Generate theme-based gradient for avatar
-            const getGradient = () => {
-              switch (example.theme) {
-                case 'dark':
-                  return 'from-gray-700 via-gray-800 to-gray-900';
-                case 'light':
-                  return 'from-blue-200 via-purple-200 to-pink-200';
-                case 'gradient':
-                  return 'from-purple-500 via-pink-500 to-orange-500';
-                default:
-                  return 'from-blue-500 to-purple-600';
-              }
-            };
-
-            // Parallax effect - subtle movement
-            const yParallax = useTransform(
-              scrollYProgress,
-              [0, 1],
-              [0, (index % 2 === 0 ? -30 : -20)]
-            );
-
-            return (
-              <motion.a
-                key={example.id}
-                href={`/${example.username}`}
-                className="group flex flex-col items-center cursor-pointer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
-                style={{ y: yParallax }}
-              >
-                {/* Avatar circle */}
-                <div className="relative">
-                  {/* Gradient ring on hover */}
-                  <div
-                    className={`absolute inset-0 rounded-full bg-gradient-to-br ${getGradient()} opacity-0 group-hover:opacity-100 transition-opacity blur-md`}
-                  />
-
-                  {/* Avatar */}
-                  <div
-                    className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${getGradient()} flex items-center justify-center border-4 border-background shadow-lg`}
-                  >
-                    {/* Initials or icon */}
-                    <span className="text-white font-bold text-2xl md:text-3xl">
-                      {example.displayName.charAt(0)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Username */}
-                <p className="mt-3 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                  @{example.username}
-                </p>
-
-                {/* Category badge */}
-                <span className="mt-1 text-xs text-muted-foreground">{example.category}</span>
-              </motion.a>
-            );
-          })}
+          {EXAMPLE_PAGES.map((example, index) => (
+            <ExampleAvatar
+              key={example.id}
+              example={example}
+              index={index}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
         </div>
 
         {/* CTA */}
@@ -124,9 +142,7 @@ export function ExamplesGallery() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <p className="text-muted-foreground">
-            Join them and start sharing your world in seconds
-          </p>
+          <p className="text-muted-foreground">Join them and start sharing your world in seconds</p>
         </motion.div>
       </div>
     </section>

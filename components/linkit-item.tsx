@@ -1,6 +1,6 @@
 'use client';
 
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import { Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
